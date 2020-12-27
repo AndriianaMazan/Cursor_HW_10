@@ -1,0 +1,64 @@
+#! /D/prog/.jdks/openjdk-15.0.1/bin/java --source 15
+
+import java.util.*;
+import java.util.stream.Collectors;
+
+public class ShebangTasks {
+    public static Scanner scanner = new Scanner(System.in);
+
+    public static void main(String[] args) {
+        menu();
+    }
+
+    public static void menu(){
+        System.out.println("Choose exercise [uniqueNumbers, marks] or type 'q' for exit:");
+        String item = scanner.nextLine();
+
+        switch (item){
+            case "marks":
+                itemMarks();
+                break;
+            case "uniqueNumbers":
+                itemUniqueNumbers();
+                break;
+            case "q":
+                return;
+        }
+        menu();
+    }
+
+    public static void itemUniqueNumbers(){
+        String numbers;
+        List<Integer> numbersSet = new ArrayList<Integer>();
+
+        System.out.println("Input numbers set: ");
+        numbers = scanner.nextLine();
+        String[] numbersArray = numbers.split(", ");
+        for (String s : numbersArray) {
+            numbersSet.add(Integer.parseInt(s));
+        }
+
+        Object result = numbersSet
+                .stream()
+                .collect(Collectors.teeing(
+                        Collectors.counting(),
+                        Collectors.toSet(),
+                        (amount, uniqueNumbers) -> ((float)uniqueNumbers.size()/ amount * 100)));
+        System.out.println( result + "%");
+    }
+
+    public static void itemMarks(){
+        System.out.println("Input your mark: ");
+        int numericMark = scanner.nextInt();
+        String textMark;
+        textMark = switch (numericMark){
+            case 9, 10 -> "Well";
+            case 7,8 -> "Good";
+            case 6 ->"Acceptable";
+            case 5 -> "Bad";
+            case 0, 1, 2, 3, 4 -> "Very Bad";
+            default -> "Wrong input";
+        };
+        System.out.println(textMark);
+    }
+}
